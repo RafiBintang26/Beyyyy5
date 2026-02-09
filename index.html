@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Sticker Party!</title>
+
+<style>
+:root{
+  --pink-bg:#ffccd5;
+  --hot-pink:#ff4d6d;
+  --cream:#fff0f3;
+}
+
+body{
+  margin:0;
+  background-color:var(--pink-bg);
+  background-image:radial-gradient(#ffb3c1 1px,transparent 1px);
+  background-size:30px 30px;
+  font-family:'Fredoka One', cursive, sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:40px 20px;
+  overflow-x:hidden;
+}
+
+/* Header */
+.title{
+  background:white;
+  padding:15px 40px;
+  border-radius:50px;
+  color:var(--hot-pink);
+  font-size:2rem;
+  box-shadow:8px 8px 0 var(--hot-pink);
+  margin-bottom:50px;
+  border:3px solid var(--hot-pink);
+  z-index:10;
+}
+
+/* Gallery */
+.gallery-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:25px;
+  max-width:1000px;
+  width:100%;
+  z-index:5;
+}
+
+.photo-card{
+  background:white;
+  padding:10px;
+  border:2px solid var(--hot-pink);
+  box-shadow:5px 5px 15px rgba(0,0,0,.1);
+  position:relative;
+  transition:.3s;
+}
+
+.photo-card:nth-child(even){transform:rotate(3deg)}
+.photo-card:nth-child(odd){transform:rotate(-3deg)}
+
+.photo-card:hover{
+  transform:scale(1.05) rotate(0);
+  z-index:20;
+}
+
+.photo-card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  border-radius:5px;
+}
+
+.photo-sticker{
+  position:absolute;
+  font-size:40px;
+  z-index:25;
+  filter:drop-shadow(2px 2px 0 white);
+}
+
+/* Background Stickers */
+.bg-stickers{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+}
+
+.floating{
+  position:absolute;
+  font-size:30px;
+  animation:float 6s infinite ease-in-out;
+}
+
+@keyframes float{
+  0%,100%{transform:translate(0,0) rotate(0)}
+  50%{transform:translate(20px,-30px) rotate(20deg)}
+}
+
+/* Music */
+#music-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:white;
+  border:3px solid var(--hot-pink);
+  border-radius:50%;
+  width:60px;
+  height:60px;
+  cursor:pointer;
+  font-size:25px;
+  z-index:100;
+}
+
+/* ===== ARROW (DITAMBAHKAN SAJA) ===== */
+.next-arrow{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:42px;
+  color:var(--hot-pink);
+  cursor:pointer;
+  animation:bounce 1.3s infinite;
+  z-index:120;
+  text-shadow:2px 2px 0 white;
+}
+
+.next-arrow span{
+  display:block;
+  font-size:12px;
+  margin-top:-6px;
+  color:white;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translate(-50%,0)}
+  50%{transform:translate(-50%,-12px)}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="myAudio" loop>
+  <source src="lagu.mp3" type="audio/mpeg">
+</audio>
+<button id="music-btn" onclick="toggleMusic()">🎵</button>
+
+<div class="bg-stickers" id="bg-stickers"></div>
+
+<div class="title">Our Love Story! ✨</div>
+
+<div class="gallery-container">
+  <div class="photo-card">
+    <div class="photo-sticker" style="top:-20px;left:-20px">🧸</div>
+    <img src="foto1.jpg">
+  </div>
+  <div class="photo-card">
+    <div class="photo-sticker" style="bottom:-20px;right:-20px">🎀</div>
+    <img src="foto2.jpg">
+  </div>
+  <div class="photo-card">
+    <div class="photo-sticker" style="top:-20px;right:-10px">🍭</div>
+    <img src="foto3.jpg">
+  </div>
+  <div class="photo-card">
+    <div class="photo-sticker" style="bottom:-15px;left:-10px">💖</div>
+    <img src="foto4.jpg">
+  </div>
+  <div class="photo-card">
+    <div class="photo-sticker" style="top:10px;left:-25px">🍓</div>
+    <img src="foto5.jpg">
+  </div>
+  <div class="photo-card">
+    <div class="photo-sticker" style="bottom:10px;right:-25px">✨</div>
+    <img src="foto6.jpg">
+  </div>
+</div>
+
+<!-- ARROW -->
+<div class="next-arrow" onclick="goNext()">
+  ➜
+  <span>Next</span>
+</div>
+
+<script>
+/* MUSIC */
+const audio=document.getElementById("myAudio");
+function toggleMusic(){
+  if(audio.paused){
+    audio.play();
+    document.getElementById("music-btn").innerText="⏸️";
+  }else{
+    audio.pause();
+    document.getElementById("music-btn").innerText="🎵";
+  }
+}
+document.body.addEventListener("click",()=>{
+  if(audio.paused) toggleMusic();
+},{once:true});
+
+/* BACKGROUND STICKERS */
+const emojis=['💖','💌','🌸','🐾','🎀','🧸','🍭','🌈','🍦','🍓'];
+const container=document.getElementById('bg-stickers');
+for(let i=0;i<30;i++){
+  const s=document.createElement('div');
+  s.className='floating';
+  s.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+  s.style.left=Math.random()*100+'vw';
+  s.style.top=Math.random()*100+'vh';
+  s.style.animationDelay=Math.random()*5+'s';
+  s.style.opacity='0.4';
+  container.appendChild(s);
+}
+
+/* ARROW ACTION */
+function goNext(){
+  window.location.href="https://val-1-delta.vercel.app/";
+}
+</script>
+
+</body>
+</html>
